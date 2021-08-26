@@ -54,7 +54,7 @@ graph TD;
 
 + .c, .java, .py
 
-  ![image-20210825085540157](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825085540157.png)$$
+  ![image-20210825085540157](Week1_LiveOak_SaM.assets/image-20210825085540157.png)$$
 
 ### Languages, Grammars, Recognizers
 
@@ -93,7 +93,7 @@ graph TD;
   - $[\;]$ is the character class construction operator.
   - ( ) are parentheses used for grouping.
 
-![image-20210825091212892](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825091212892.png)
+![image-20210825091212892](Week1_LiveOak_SaM.assets/image-20210825091212892.png)
 
 + Interpreting above grammar
   + Program is a body
@@ -101,11 +101,11 @@ graph TD;
   + …
   + Identifier: start with alphabets, then followed by 0 or more a-zA-Z0-9_
 
-![image-20210825091926250](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825091926250.png)
+![image-20210825091926250](Week1_LiveOak_SaM.assets/image-20210825091926250.png)
 
-![image-20210825092003586](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825092003586.png)
+![image-20210825092003586](Week1_LiveOak_SaM.assets/image-20210825092003586.png)
 
-![image-20210825092238417](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825092238417.png)
+![image-20210825092238417](Week1_LiveOak_SaM.assets/image-20210825092238417.png)
 
 
 
@@ -128,7 +128,7 @@ graph TD;
   - Interface 4: User ISA.
   - Interface 1: HLL library calls.
 
-![image-20210825092725062](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825092725062.png)
+![image-20210825092725062](Week1_LiveOak_SaM.assets/image-20210825092725062.png)
 
 #### Interface 4: The User ISA
 
@@ -181,7 +181,7 @@ $$\mathbb{A}=(\Sigma, \mathcal{J})$$
 + JVM memory states: method area, heap, JVM language stacks, PC registers, native method stacks
 + Execution Engine
 
-![image-20210825095354980](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825095354980.png)
+![image-20210825095354980](Week1_LiveOak_SaM.assets/image-20210825095354980.png)
 
 #### Instruction set (Opcodes)
 
@@ -200,7 +200,7 @@ $$\mathbb{A}=(\Sigma, \mathcal{J})$$
   - Extended (196-201): wide, ifnull, goto_w,...
   - Reserved (202-255): breakpoint, ...
 
-![image-20210825100128470](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825100128470.png)
+![image-20210825100128470](Week1_LiveOak_SaM.assets/image-20210825100128470.png)
 
 ## Stack Abstract Machine (SAM)
 
@@ -214,11 +214,11 @@ $$\mathbb{A}=(\Sigma, \mathcal{J})$$
 
 ### Program Execution in SaM
 
-![image-20210825115236311](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825115236311.png)
+![image-20210825115236311](Week1_LiveOak_SaM.assets/image-20210825115236311.png)
 
 + Execute command: involves changing PC pointing to next value
 
-![image-20210825115414301](/Users/ayang/Documents/SIMPL/Notes/Week1_LiveOak_SaM.assets/image-20210825115414301.png)
+![image-20210825115414301](Week1_LiveOak_SaM.assets/image-20210825115414301.png)
 
 + Loader: open files
 
@@ -236,7 +236,7 @@ $$\mathbb{A}=(\Sigma, \mathcal{J})$$
 
 
 
-## SaM
+# SaM
 
 Installation on M1
 
@@ -255,7 +255,7 @@ Installation on M1
 + Use screen sharing to connect to local host: 
   + Finder -> Go -> connect to server -> `vnc://localhost:59000`
 
-### Stack Machine
+## Stack Machine
 
 #### Components
 
@@ -267,7 +267,7 @@ Installation on M1
 + Atomic types and addresses take one stack location. (elements of fixed size)
   - Strings and objects are stored in the heap.
 
-#### Structure of operations
+## Operations
 
 - General invariant
   - Pop necessary number of operands from top of stack (TOS)
@@ -275,27 +275,154 @@ Installation on M1
 
 
 
-+ PUSHIM c
++ **PUSHIM** c
   + push immediate: push value c to TOS
 
-##### ALU Commands
+### ALU Commands
 
-+ Commands
-  + $A D D, S U B, \ldots$
-  + DUP: duplicate TOS.
-  + ISPOS ("is positive"):
-  + Pop stack; let popped value be $V t$.
-  + If $V t$ is positive, push true (1); otherwise push false (0).
-  + ISNEG ("is negative"): Same, but tests for negative value on TOS.
-  + ISNIL ("is null"): Same, but tests for zero value on TOS.
-  + CMP:
-  + Pop two values $V t$ and $V b$ from stack.
+#### Commands
+
++ $A D D, S U B, \ldots$
++ DUP: duplicate TOS.
++ ISPOS ("is positive"):
++ Pop stack; let popped value be $V t$.
++ If $V t$ is positive, push true (1); otherwise push false (0).
++ ISNEG ("is negative"): Same, but tests for negative value on TOS. (compare to 0)
++ ISNIL ("is null"): Same, but tests for zero value on TOS.
++ CMP:
+  + Pop <u>two values</u> $V t$ and $V b$ from stack.
   + If $(V b<V t)$, push 1 .
   + If $(V b=V t)$, push 0 .
   + If $(V b>V t)$, push $-1$.
-+ SaM ALU commands operate on values at or near TOS.
+
++ SaM ALU commands operate on values at or near TOS. And there is no notion of memory and registers (how to know where things are in interior of stack?)
   + To operate on values from the interior of the stack, we need to copy them from an interior location to TOS, or write them from TOS to an interior location.
-  + PUSHIND, STOREIND.
+  + indirect mode: PUSHIND, STOREIND.
     + put address to the value on TOS
-  + PUSHOFF, STOREOFF.
-    - put address offset on TOS
+    + **PUSHIND**
+      + TOS contains the address
+      + pop address
+      + read content of the address
+      + push contents on stack
+      + <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826080553292.png" alt="image-20210826080553292" style="zoom:50%;" />
+    + **STOREIND**
+      + TOS contains: first - value, second - address
+      + <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826080708326.png" alt="image-20210826080708326" style="zoom:50%;" />
+  + offset mode: PUSHOFF, STOREOFF.
+    - put address offset on TOS, offset as argument
+    - **PUSHOFF**
+      - has frame base register pointing to base address, offset is relative to the base address
+      - Stack[FBR+n] -> v, push v to TOS
+      - <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826080951339.png" alt="image-20210826080951339" style="zoom:50%;" />
+    - **STOREOFF**
+      - TOS contains v
+      - pop v
+      - Stack[FBR+n] <- v
+      - <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826081136773.png" alt="image-20210826081136773" style="zoom:50%;" />
+
+### Control Commands
+
+#### Motivation
+
++ Implicitly, PC increment by 1 at end of interpreting an instruction
++ Loops, conditions: need transfer control to non-sequential instruction
+
+#### Branching Instruction
+
++ JUMP (unconditional jump) *t*
+  + jump to command at Program[*t*]
+  + 
++ JUMPC (conditional jump) *t*
+  + Vt <- TOS (Vt is a boolean, generated before this step)
+  + if Vt is true, then PC <- *t*, else PC <- PC + 1
+
+#### Example
+
+Find $\text{abs}(x) = x > 0 \; ? \; x : -x$
+
+init: [x]
+
+0. DUP [x | x]
+
+1. ISPOS [x | x > 0 ? : Bool]: replace TOS with boolean result
+2. JUMPC 5
+   + true branch: jump to STOP
+   + false branch: move to next
+3. PUSHIMM -1: [x | -1] [Q: does all operations except for DUP automatically replace the TOS value?]
+4. TIMES: [-x] 
+5. STOP: pop TOS and finish
+
+x>0 case: 0, 1, 2, 5
+
+x <= 0 case: 0, 1, 2, 3, 4, 5
+
+### Method Invocation
+
+#### Background
+
++ Stack machine: LIFO to store data, and also maintain values of control registers (stack pointer, frame/base register, program counter)
+  + stack frames: a group of stack cells, used to capture data being passed from caller routine (P) to callee routine (Q)
+  + parameters: P -> Q
+  + return value: Q -> P
+  + Linkage info: allows control between activating Q and P , FBR points to the saved FBR of current active frame
+    + FBR + (on top of) : local variables & saved PC
+    + FBR - (below) : parameters & return value
+  + <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826090332787.png" alt="image-20210826090332787" style="zoom:67%;" />
+
+```c
+int power(int b, unsigned p){
+	if (p == 0) return 1;
+	else return b * power(b, p-1) [mult happens on empty stacks on top]
+}
+```
+
+<img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826090613366.png" alt="image-20210826090613366" style="zoom:67%;" />
+
+#### Control registers
+
+##### Stack Pointer (SP)
+
+Always point to TOS empty stack cell
+
+- **PUSHSP**
+  - Push value of SP to stack.
+  $\operatorname{Stack}[\mathrm{SP}] \leftarrow \mathrm{SP} ; \mathrm{SP} \leftarrow \mathrm{SP}+1$
+- **POPSP**
+  - Inverse of PUSHSP.
+  - SP <- SP - 1; SP <- Stack[SP]
+- **ADDSP** $n$
+  - Convenient for method invocation.
+  - $\mathrm{SP} \leftarrow \mathrm{SP}+n$
+  - Shorthand for the sequence [PUSHP, PUSHIMM n, ADD, POPSP].
+
+##### Frame Base Register (FBR)
+
+- **PUSHFBR**
+  - Push value of FBR to stack.
+    $\operatorname{Stack}[\mathrm{SP}] \leftarrow \mathrm{FBR} ; \mathrm{SP} \leftarrow \mathrm{SP}+1$
+- **POPFBR**
+  - Inverse of PUSHSP.
+  - SP <- SP - 1; SP <- Stack[FBR]
+- **LINK**
+  - push FBR to SP, then update FBR with current SP
+  - similar to PUSHFBR, but also updates FBR to the SP location before incrementing
+  - Stack[SP] <- FBR; <u>FBR <- SP</u>; SP <- SP-1
+  - <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826093916877.png" alt="image-20210826093916877" style="zoom:67%;" />
+
+##### Program Counter (PC)
+
+Call at position _n_, return at position _n+1_ 
+
++ **JSR** _label_ : Jump to subroutine [jal]
+  + for saving next caller program position and go to callee to start the subroutine
+  + save value of PC+1 and jump to _label_
+  + Stack[PC] <- PC + 1, SP <- SP+1,  PC <- _label_
+
++ **JUMPIND** (RET) [jr]
+  + for return from method call
+  + pop off stack, PC goes to the address pointed by current top stack value (should be "saved PC")
+  + SP <- SP -1; PC <- Stack[SP]
++ **JSRIND** (_label_ is put on stack, not part of instruction)
+  + temp <- Stack[SP]; Stack[SP] <- PC + 1; PC <- temp [Q: what is temp?]
+
+- 
