@@ -304,21 +304,21 @@ Installation on M1
       + pop address
       + read content of the address
       + push contents on stack
-      + <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826080553292.png" alt="image-20210826080553292" style="zoom:50%;" />
+      + <img src="Week1_LiveOak_SaM.assets/image-20210826080553292.png" alt="image-20210826080553292" style="zoom:50%;" />
     + **STOREIND**
       + TOS contains: first - value, second - address
-      + <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826080708326.png" alt="image-20210826080708326" style="zoom:50%;" />
+      + <img src="Week1_LiveOak_SaM.assets/image-20210826080708326.png" alt="image-20210826080708326" style="zoom:50%;" />
   + offset mode: PUSHOFF, STOREOFF.
     - put address offset on TOS, offset as argument
     - **PUSHOFF**
       - has frame base register pointing to base address, offset is relative to the base address
       - Stack[FBR+n] -> v, push v to TOS
-      - <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826080951339.png" alt="image-20210826080951339" style="zoom:50%;" />
+      - <img src="Week1_LiveOak_SaM.assets/image-20210826080951339.png" alt="image-20210826080951339" stye="zoom:50%;" />
     - **STOREOFF**
       - TOS contains v
       - pop v
       - Stack[FBR+n] <- v
-      - <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826081136773.png" alt="image-20210826081136773" style="zoom:50%;" />
+      - <img src="Week1_LiveOak_SaM.assets/image-20210826081136773.png" alt="image-20210826081136773" style="zoom:50%;" />
 
 ### Control Commands
 

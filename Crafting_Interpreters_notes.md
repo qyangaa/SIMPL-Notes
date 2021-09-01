@@ -74,3 +74,34 @@
   + class beased languages: Instances (objects), classes, inheritance
   + prototype-based languages: only objects, objects inherit from other objects
 
+
+
+## Grammars
+
+For context free grammar …
+
++ head: name
++ Body: describe what the grammar rule generates, a list of symbols
+  + Terminal: literal value (`if` or `1234`)
+  + nonterminal: named reference to another rule in the grammar
+
+### Bachus-Naur form (BNF)
+
+```
+expression     → literal
+               | unary
+               | binary
+               | grouping ;
+
+literal        → NUMBER | STRING | "true" | "false" | "nil" ;
+grouping       → "(" expression ")" ;
+unary          → ( "-" | "!" ) expression ;
+binary         → expression operator expression ;
+operator       → "==" | "!=" | "<" | "<=" | ">" | ">="
+               | "+"  | "-"  | "*" | "/" ;
+```
+
+
+
++ Syntax tree: defined syntax types for parser and interpreter to communicate
+
