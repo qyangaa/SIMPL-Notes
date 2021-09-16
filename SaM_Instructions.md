@@ -1,0 +1,99 @@
+[SaM Instruction Set Architecture Manual](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node29.html)
+
+- Type Converters
+  - [FTOI](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node31.html)
+  - [FTOIR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node32.html)
+  - [ITOF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node33.html)
+- Stack Insertions
+  - [PUSHIMM](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node35.html)
+  - [PUSHIMMF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node36.html)
+  - [PUSHIMMCH](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node37.html)
+  - [PUSHIMMMA](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node38.html)
+  - [PUSHIMMPA](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node39.html)
+  - [PUSHIMMSTR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node40.html): Allocates space for the string on the heap, stores the sequence of characters on the heap, starting with the first letter as the lowest heap location. The string is null-terminated automatically. The object's address is pushed onto the stack.
+- Register Manipulation
+  - [PUSHSP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node42.html)
+  - [PUSHFBR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node43.html)
+  - [POPSP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node44.html)
+  - [POPFBR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node45.html): Sets the FBR register to the value at the top of the stack
+    - Use after `JSR label` to undo LINK.
+- Stack Manipulation
+  - [DUP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node47.html)
+  - [SWAP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node48.html)
+- Stack/Heap Allocation
+  - [ADDSP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node50.html) n: Increments the SP register by the provided value.
+    - To make space for variables during declaration, use before body of method
+    - n = number of variables declared
+  - [MALLOC](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node51.html): This instruction allocates space on the heap of size provided by the input value. It writes the address of the allocated space to the stack.
+  - [FREE](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node52.html)
+- Absolute Store/Retrieve
+  - [PUSHIND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node54.html)
+  - [STOREIND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node55.html)
+  - [PUSHABS](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node56.html)
+  - [STOREABS](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node57.html)
+- Relative Store/Retrieve: with respect to FBR
+  - [PUSHOFF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node59.html): Pushes the data at the memory address of the FBR+operand onto the stack.
+  - [STOREOFF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node60.html): [Q: remove TOS element?]
+- Integer Algebra
+  - [ADD](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node62.html)
+  - [SUB](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node63.html): (TOS-1) - TOS
+  - [TIMES](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node64.html)
+  - [DIV](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node65.html)
+  - [MOD](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node66.html)
+- Floating Point Algebra
+  - [ADDF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node68.html)
+  - [SUBF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node69.html)
+  - [TIMESF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node70.html)
+  - [DIVF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node71.html)
+- Shifts
+  - [LSHIFT](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node73.html)
+  - [LSHIFTIND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node74.html)
+  - [RSHIFT](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node75.html)
+  - [RSHIFTIND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node76.html)
+- Logic
+  - [AND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node78.html)
+  - [OR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node79.html)
+  - [NOR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node80.html)
+  - [NAND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node81.html)
+  - [XOR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node82.html)
+  - [NOT](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node83.html)
+- Bitwise Logic
+  - [BITAND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node85.html)
+  - [BITOR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node86.html)
+  - [BITNOR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node87.html)
+  - [BITNAND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node88.html)
+  - [BITXOR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node89.html)
+  - [BITNOT](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node90.html)
+- Comparison
+  - [CMP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node92.html)
+  - [CMPF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node93.html)
+  - [GREATER](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node94.html)
+  - [LESS](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node95.html):  If the TOS-1 < TOS, a 1 is placed on the stack. Otherwise, a 0 is placed on the stack. 
+  - [EQUAL](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node96.html)
+  - [ISNIL](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node97.html)
+  - [ISPOS](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node98.html)
+  - [ISNEG](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node99.html)
+- Jumps
+  - [JUMP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node101.html): Sets the PC to the instruction specified by the label and continues execution starting with that instruction.
+  - [JUMPC](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node102.html) label: if TOS !=0, jump to label
+  - [JUMPIND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node103.html): Sets the PC to the input value and continues execution with that instruction. This if often used to undo a JSR.
+  - [RST](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node104.html)
+  - [JSR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node105.html): Sets the PC to the instruction found at the label, pushes the current PC + 1 onto the stack, and continues execution at the next instruction. 
+    - After ` LINK` for subroutines.
+  - [JSRIND](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node106.html)
+  - [SKIP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node107.html)
+- Stack Frames
+  - [LINK](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node109.html): Pushes the FBR register on the stack and sets the FBR register to the SP register - 1.
+    - Use before `JSR label`
+  - [UNLINK](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node110.html)
+- Input/Output
+  - [READ](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node112.html)
+  - [READF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node113.html)
+  - [READCH](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node114.html)
+  - [READSTR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node115.html)
+  - [WRITE](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node116.html)
+  - [WRITEF](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node117.html)
+  - [WRITECH](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node118.html)
+  - [WRITESTR](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node119.html)
+- Program Control
+  - [STOP](https://www.cs.cornell.edu/courses/cs212/2008sp/Compiler/SaM/doc/samdesign-2.6.2/node121.html): Sets the HALT register to 1, effectively stopping program execution.

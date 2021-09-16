@@ -179,16 +179,20 @@ DIV X,R1,R3
 Write SaM code by hand to perform the following tasks. In all cases, the TOS element is the last one in the list. Use the SaM architecture manual as your reference for SaM bytecodes.
 (a) Given an initial stack containing two integers $x$ and $y$, return a final stack containing $x+y$  and  $x-y$.
 
-x + y:
-
 ```
-ADD (replace top two items by result)
-```
+// put x + y on stack
+PUSHOFF -2
+PUSHOFF -1
+ADD; [x,y,FBR,x+y]
 
-x - y:
+// put x-y on stack
+PUSHOFF -2
+PUSHOFF -1
+SUB; [x,y,FBR,x-y]
 
-```
-SUB
+// put x+y and x-y back
+STOREOFF -1; [x,x-y,FBR,x+y]
+STOREOFF -2; [x+y, x-y, FBR]
 ```
 
 (b) Given an initial stack containing two integers $x$ and $y$, return a final stack containing $5 x+3 y$ without using integer multiplication.

@@ -434,17 +434,17 @@ flowchart TB;
 ```python
 # S = if(E, S1, S2), Lnext is equivalent to END
 def codegenIF(E, Lnext, Lbreak):
-	Lnew1, Lnew2 = newlabel(), newlabel()
-	CE = codegen(E, newlabel(), newlabel())
-  CS1 = codegen(S1, Lnext, Lbreak) # 
-  CS2 = codegen(S2, Lnext, Lbreak)
-  return CE 
-				+ "JUMPC Lnew1\n" # if E, jump to CS1
-    		+ "Lnew2:\n"
-      	+ CS2 # else
-      	+ "JUMPC Lnew1\n"
-        + "Lnew1:\n"
-      	+ CS1
+	Lif, Lend = newlabel(), newlabel()
+	condition = codegen(E, newlabel(), newlabel())
+  ifBlock = codegen(S1, Lnext, Lbreak) # 
+  elseBlock = codegen(S2, Lnext, Lbreak)
+  return condition 
+				+ "JUMPC Lif\n" # if E, jump to CS1
+      	+ elseblock # else
+      	+ "JUMP Lend"
+        + "Lif:\n"
+      	+ ifblock
+        + Lend
  
 # S = while(E,S1)
 def codegenWHILE(E, Lnext, Lbreak):
@@ -510,7 +510,7 @@ ADDSP -n // remove all parameter slots
 	ADDSP c // total c local variables
 	[Code for B] // execution
 fEnd:
-	STOREOFF r // store TOS value to (FBR + r) where the return slot is, from caller
+	STOREOFF r // store TOS value to (FBR + r) where the return slot is, from caller [Q: whether r always == -1, how do we know where return slot is when declaring the method?]
 	ADDSP -c // remove local varable slots, then TOS is saved PC (rv) (line after return from JSR f)
 	JUMPIND // put return value to (rv)
 ```
