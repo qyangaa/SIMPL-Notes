@@ -450,46 +450,71 @@ $$
 
 ### Architecture
 
-- #### Procedure linking information - pointers
+![image-20210916153014418](Week4_Register_Machines.assets/image-20210916153014418.png)
 
-  - ` %RBP`The stack-frame base pointer: identifies a fixed reference point within the stack frame for the called procedure. (FBP for SAM)
-  - `%RIP`: return-instruction pointer (RIP): instruction in calling procedure which should be resumed after called procedure returns
+#### Procedure linking information - pointers
 
-- #### Procedure calls are supported with CALL and RET instructions.
+- ` %RBP`The stack-frame base pointer: identifies a fixed reference point within the stack frame for the called procedure. (FBP for SAM)
+- `%RIP`: return-instruction pointer (RIP): instruction in calling procedure which should be resumed after called procedure returns
 
-  - CALL:
-    - `Stack <- R[%rip]` : Pushes the current value of %RIP on the stack. 
-      - Prior to branching to the first instruction of the called procedure, the CALL instruction pushes the address in the %RSP register onto the current stack. 
-    - `%rip <- offset`: Loads the offset of the called procedure in %RIP.
-    - Begins execution of the called procedure.
-  - RET:
-    - `%rip <- Stack`: Pops the TOS value (the return instruction pointer) into %RIP.
-      - Upon returning from a called procedure, the RET instruction pops the RIP from the stack back into the %RSP register. Execution of the calling procedure then resumes.
-    - If the RET has an optional argument $n$, increments %RSP by $n$.
-    - Resumes execution of the calling procedure. [Q: PC -> RIP?]
+#### Procedure calls are supported with CALL and RET instructions.
 
-- #### Pass Parameters (or results) in any of three ways: 
+- CALL:
+  - `Stack <- R[%rip]` : Pushes the current value of %RIP on the stack. 
+    - Prior to branching to the first instruction of the called procedure, the CALL instruction pushes the address in the %RSP register onto the current stack. 
+  - `%rip <- offset`: Loads the offset of the called procedure in %RIP.
+  - Begins execution of the called procedure.
+- RET:
+  - `%rip <- Stack`: Pops the TOS value (the return instruction pointer) into %RIP.
+    - Upon returning from a called procedure, the RET instruction pops the RIP from the stack back into the %RSP register. Execution of the calling procedure then resumes.
+  - If the RET has an optional argument $n$, increments %RSP by $n$.
+  - Resumes execution of the calling procedure. [Q: PC -> RIP?]
 
-  - through GPRs, 
-    - The processor does not save the state of the GPRs on procedure calls. 
-    - up to six parameters
-    - copying the parameters into any of GPRs (except %RSP and % RBP) prior to executing the CALL instruction.
-  - on the stack.
-    - large number of parameters 
-    - parameters placed in the stack frame for the calling procedure. 
-    - use the stack-frame base pointer (%RBP) to make a frame boundary for easy access to the parameters.
-  - an argument list in memory. 
-    - larger number of parameters 
-    - Pass a pointer to the argument list to the called procedure through a GPR or the stack.
+#### Pass Parameters (or results) 
 
-- #### caller save GPRs & RFLAGS for use when resuming: 
+- through GPRs, 
 
-  - The processor does not save the contents of the GPRs or the RFLAGS register on a procedure call. 
-  - Need to be saved on the stack or in memory. (not for normal user level calls)
-    - PUSHA: save all GPRs
-    - POPA: restore all GPRS
-    - PUSHF/PUSHFD: save all RFLAGS
-    - POPF/POPFD: restore all RFLAGS
+  - The processor does not save the state of the GPRs on procedure calls. 
+
+  - up to six parameters
+
+  - copying the parameters into any of GPRs (except %RSP and % RBP) prior to executing the CALL instruction.
+
+  - $$
+    \begin{array}{|l|}
+    \hline \% r d i \\
+    \hline \%  r s i \\
+    \hline \%  r d x \\
+    \hline \%  r C x \\
+    \hline \%  r 8 \\
+    \hline \%  r 9 \\
+    \hline
+    \end{array}
+    $$
+
+- on the stack.
+
+  - large number of parameters 
+  - parameters placed in the stack frame for the calling procedure. 
+  - use the stack-frame base pointer (%RBP) to make a frame boundary for easy access to the parameters.
+
+- an argument list in memory. 
+
+  - larger number of parameters 
+  - Pass a pointer to the argument list to the called procedure through a GPR or the stack.
+
+#### Return
+
+To %rax, %rdx
+
+#### caller save GPRs & RFLAGS for use when resuming: 
+
+- The processor does not save the contents of the GPRs or the RFLAGS register on a procedure call. 
+- Need to be saved on the stack or in memory. (not for normal user level calls)
+  - PUSHA: save all GPRs
+  - POPA: restore all GPRS
+  - PUSHF/PUSHFD: save all RFLAGS
+  - POPF/POPFD: restore all RFLAGS
 
 ## AMD64 ABI
 
