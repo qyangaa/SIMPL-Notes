@@ -85,6 +85,7 @@
 - At end of basic block, store values of live variables defined by statements within the basic block to their home (memory) locations.
 
 + The **Register Allocator**: getrego
+
   + Initialize the register map so that the appropriate registers contain the input parameters of the method.
 
   + Scan the list of all registers to find $r$ whose $R D(r)$ is empty. Return $r$.
@@ -118,6 +119,32 @@
   rewrite t <- y+z:  if (x < t)
   rewrite to x-t<0
   [TODO: check x86 code for this]
+  
+  void f(int x, int y, int z) {
+    if(x < (y + z)){
+        x = x - y;
+    }
+  }
+  
+          pushq   %rbp
+          movq    %rsp, %rbp // callee saved
+          // save parameters to memory
+          movl    %edi, -4(%rbp)
+          movl    %esi, -8(%rbp)
+          movl    %edx, -12(%rbp)
+          // cond
+          movl    -8(%rbp), %edx // load y
+          movl    -12(%rbp), %eax // load z
+          addl    %edx, %eax // y + z
+          cmpl    %eax, -4(%rbp) // x - (y+z)
+          jge     .L3 // jump if x - (y+z) >= 0
+          // if
+          movl    -8(%rbp), %eax
+          subl    %eax, -4(%rbp)
+  .L3:		// else
+          nop
+          popq    %rbp
+          ret
   ```
 
   ```
@@ -165,6 +192,7 @@
     
     // long P(long x, long y){
     pushq %rbp # callee saved
+    movq   %rsp, %rbp
     pushq %rbx	# callee saved
     subq $8, %rsp
     movq %rdi, %rbp #caller saved x
