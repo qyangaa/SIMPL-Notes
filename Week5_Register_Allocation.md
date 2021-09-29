@@ -28,7 +28,7 @@
 - Pre-coloring
   - Forcing some variables to be assigned to particular registers, e.g., arguments and return values in procedure linkage on $\times 86$.
 - Problem complexity
-  - **Global register allocation is NP-complete**, by a reduction from the standard NP-complete problem [GT4] of graph k-colorability ( "Given a graph $G=(V, E)$ and a natural number $k$ such that $2<k \leq|V|$, determine whether or not there is an $k$-coloring of $G^{\prime \prime}$ ).
+  - ==**Global register allocation is NP-complete**,== by a reduction from the standard NP-complete problem [GT4] of graph k-colorability ( "Given a graph $G=(V, E)$ and a natural number $k$ such that $2<k \leq|V|$, determine whether or not there is an $k$-coloring of $G^{\prime \prime}$ ).
   - Not a significant problem in practice, but worst-case scenarios can be constructed.
 
 
@@ -61,11 +61,10 @@ Improved Local Register Allocation
 - Example: $(A-B)+((C+D)+(E * F))$.
   - How many temporaries does it take to generate 3-address code for this expression? 11 -> 6 -> 3
 
-  - [Q: the lecture mentioned algorithm, what algorithm is that?]
-
     ![image-20210922091847021](Week5_Register_Allocation.assets/image-20210922091847021.png)
 
-### Sethi-Ullman Numbering Algorithm
+
+### ==Sethi-Ullman Numbering Algorithm==
 
 - [Ref: "The Generation of Optimal Code for Arithmetic Expressions", R. Sethi and J. D. Ullman, Journal of the ACM 17(4), pp. 715-728. October 1970.]
 
@@ -105,7 +104,7 @@ Improved Local Register Allocation
   - Different branches may be taken in different executions.
   - Different numbers of loop iterations may be executed in different executions.
 
-### Control Flow Graphs (CFG)
+### ==Control Flow Graphs (CFG)==
 
 #### Definition
 
@@ -115,7 +114,7 @@ Improved Local Register Allocation
 - CFG edges:  possible **flow of control** from the end of one basic block to the beginning of another basic block.
   - Edges are sometimes labeled with the Boolean value for which they are taken.
   - There may be multiple incoming/outgoing edges for a given basic block.
-- A possible execution is a **consistent path** in the CFG.
+- ==A possible execution is a **consistent path** in the CFG.==
   - There may be paths in the CFG that correspond to infeasible executions.
   - Happens if result from previous block can affect result of the next block
 
@@ -143,13 +142,13 @@ H/ LLIR: High / low level intermediate language
 
 #### Definition
 
-- A variable $v$ is live at a point $p$ in a CFG if **there is a path from $p$ to a use of $v$, and that path does not contain a (re-)definition of $v$.**
+- ==A variable $v$ is live at a point $p$ in a CFG if **there is a path from $p$ to a use of $v$, and that path does not contain a (re-)definition of $v$.**==
   - A statement is a definition of a variable $v$ if it may write to $v$.
   - A statement is a use of variable $v$ if it may read from $v$.
 - Computing liveness
   - Write down a system of equations that define live variable sets at each point in the CFG.
   - Solve the system iteratively.
-- <img src="Week5_Register_Allocation.assets/image-20210922095358955.png" alt="image-20210922095358955" style="zoom:50%;" />
+- [TODO (midterm): practice writing this] <img src="Week5_Register_Allocation.assets/image-20210922095358955.png" alt="image-20210922095358955" style="zoom:50%;" />
 
 + Compute $\text{use}(I)$ and $\operatorname{def}(I)$ sets for an instruction $I$ based on its structure.
   - $I \rightarrow x=y$ binop $z: \operatorname{use}(I)=\{y, z\} ; \operatorname{def}(I)=\{x\}$.
@@ -167,10 +166,10 @@ H/ LLIR: High / low level intermediate language
 
 #### Computation
 
-##### Out(I) -> In(I): + use - def
+##### ==Out(I) -> In(I): + use - def==
 
 - <img src="Week5_Register_Allocation.assets/image-20210922100012763.png" alt="image-20210922100012763" style="zoom:50%;" />
-- General rule
+- Assignment: add use, remove def
 
 $$
 \operatorname{In}(I)=(\operatorname{Out}(I) \backslash \operatorname{def}(I)) \cup \operatorname{use}(I)
@@ -179,7 +178,7 @@ $$
   - Given $\operatorname{Out}(B)$, can compute $\operatorname{In}(B)$.
     <img src="Week5_Register_Allocation.assets/image-20210922100039163.png" alt="image-20210922100039163" style="zoom:50%;" />
 
-##### Control flow - Union successor
+##### ==Control flow - Union successor==
 
 <img src="Week5_Register_Allocation.assets/image-20210922100319814.png" alt="image-20210922100319814" style="zoom:50%;" />
 
@@ -214,15 +213,15 @@ $$
 
 + Requirements
   + Two simultaneously live variables cannot be allocated to the same register (to interfere)
-  + Two names $m$ and $n$ interfere if **either**:
-    + **Both** names are initially live (e.g., function arguments), or 
-    +  $\exists b \in V:\{m, n\} \subseteq \operatorname{Out}(b)$.
+  + ==Two names $m$ and $n$ interfere if **either**:==
+    + ==**Both** names are initially live (e.g., function arguments), or== 
+    +  ==$\exists b \in V:\{m, n\} \subseteq \operatorname{Out}(b)$==.
 
 + Interference Graph: YAG
 
   + Given the CFG $G=(V, E)$, its interference graph $I_{G}=\left(V^{\prime}, E^{\prime}\right)$ is defined as follows.
     - nodes - variable names: $V^{\prime}$ 
-    - edge: if names interfere $(m, n) \in E^{\prime}$ (live at same time, need to be on different register)
+    - ==edge: if names interfere $(m, n) \in E^{\prime}$ (live at same time, need to be on different register)==
 
 + Graph coloring algorithm
 
@@ -233,7 +232,7 @@ $$
     <img src="Week5_Register_Allocation.assets/image-20210922102124110.png" alt="image-20210922102124110" style="zoom:50%;" />
   + Finding optimal register allocation to avoid move instructions is NP complete
 
-+ Kempe's algorithm (1879) for $K$-coloring a graph.
++ ==Kempe's algorithm (1879) for $K$-coloring a graph.==
 
   + Step 1 (simplify):
 
@@ -259,29 +258,57 @@ $$
     - Once all nodes have $K$ or more neighbors, pick a node to "spill" to the run-time stack.
     + Many heuristics can be used to pick a spill candidate.
       - Chaitin: Spill the variable $v$ with the smallest value of $\operatorname{Spill} \operatorname{Cost}(v) /$ iDegree $(v)$
+      - <img src="Week5_Register_Allocation.assets/image-20210928143957907.png" alt="image-20210928143957907" style="zoom:50%;" />
+      - SPILLCOST(v) $=\left(\Sigma\left(\mathrm{S}_{\mathrm{B}} \times 10^{\mathrm{N}}\right)\right) / \mathrm{D}$, where
+        $\mathrm{S}_{\mathrm{B}}$ is the number of uses and defs at $\mathrm{B}$ $\mathrm{N}$ is B's loop nesting factor
+        D is v's degree in the interference graph
       - Spill a variable that is not in an inner loop.
     + How to spill
       - Need to generate extra instructions to load variables from the stack and to store them. These instructions themselves use registers.
-      - Rather than reserving registers for this purpose, simply **re-write the code, introducing a new temporary, and then re-run liveness analysis and register allocation. Fewer variables will spill; the process usually converges rapidly.** [Q: how’s that done in the example of graph coloring?]
+      - Rather than reserving registers for this purpose, simply **re-write the code, introducing a new temporary, and then re-run liveness analysis and register allocation. Fewer variables will spill; the process usually converges rapidly.** [A: how’s that done in the example of graph coloring? just re-color starting from this point, or merge the current node with spilled node]
       - Intuition: You weren't able to assign a single register to the variable that was spilled, but there may be a free register available at each spot where you need to use the value of the variable.
-
+      - Linear scan: https://www.youtube.com/watch?v=YmDoiA1_ri4&list=PLC-dUCVQghfdu7AG5f_p4oRyKgjDuoAWU&index=79
+  
   + Pre-Coloring
     - Some variables are pre-assigned to registers.
       - E.g., method arguments and return values.
     - Treat these names as special temporaries. Add them to the interference graph with their colors at initialization time.
     - Such a pre-colored node cannot be removed in an attempt to simplify the interference graph.
-    - Once the interference graph has been simplified down to precolored nodes only, start adding back other nodes as before.
-
+    - ==Once the interference graph has been simplified down to precolored nodes only, start adding back other nodes as before.==
+  
   + This heuristic was applied by Chaitin in 1981 in the context of register allocation and is known as Chaitin's algorithm in the compiler literature.
-
+  
     
 
 #### Optimizing Moves: Coalescing
 
 - Motivation: Code generation tends to produce a lot of extra move instructions (generically, think MOV $t 1$, t2).
-  - If two such move-related nodes $t 1$ and $t 2$ are not connected in the interference graph, coalesce them into a single variable.
+  - ==If two such move-related nodes $t 1$ and $t 2$ are not connected in the interference graph, coalesce them into a single variable.==
+  
 - Problem :Coalescing can increase the degree of the coalesced node and make a graph uncolorable.
-- Process: [TODO: find video to explain how it works exactly]
+
+- Process:https://groups.seas.harvard.edu/courses/cs153/2018fa/lectures/Lec21-Register-alloc-II.pdf, https://www.youtube.com/watch?v=Y8rNl1cHGFA
+  
+  - **Build**: construct interference graph
+    - Categorize nodes as move-related (if src or dest of move) or non-move-related
+  - **Simplify**: Remove non-move-related nodes with degree $<k$
+  - **Coalesce**: Coalesce nodes using Briggs' or George's heuristic (only non-interfering nodes)
+    - Briggs: safe to coalesce $x$ and $y$ if the resulting node will have fewer than $k$ neighbors with degree $\geq k$.
+    - George: safe to coalesce $x$ and $y$ if for every neighbor $t$ of $x$, either $t$ already interferes with $y$ or $t$ has degree $<k$
+      - These strategies are conservative: will not turn a $k$ colorable graph into a non-k-colorable graph
+    - Possibly re-mark coalesced nodes as non-move-related
+    - Continue with Simplify if there are nodes with degree $<k$
+  - **Freeze**: if some low-degree $(<k)$ move-related node, freeze it
+    -i.e., make it non-move-related, i.e., give up on coalescing that node
+    - Continue with Simplify
+  - **Spill**: choose node with degree $\geq k$ to potentially spill
+    - Then continue with simplify
+  - **Select**: when graph is empty, start restoring nodes in reverse order and color them
+    - Potential spill node: try coloring it; if not rewrite program to use stack and try again!
+  - ![image-20210928141150771](Week5_Register_Allocation.assets/image-20210928141150771.png)
+  
+  [From lecture: ]
+  
   - Simplify and Coalesce
     - Step 1 (simplify):
       - Designate those nodes that are source or destination of a move as **move-related nodes**.
@@ -354,7 +381,7 @@ $$
 
 ##### Example 2
 
-- Two registers: The interference graph is the complete graph on $\{a, b, c\}$, and therefore not 2 -colorable.	[TODO: try to derive the graph]
+- Two registers: The interference graph is the complete graph on $\{a, b, c\}$, and therefore not 2 -colorable.	[TODO (midterm): try to derive the graph]
   <img src="Week5_Register_Allocation.assets/image-20210922170405691.png" alt="image-20210922170405691" style="zoom:50%;" />
 - reg $\left(a,\left[2^{+}, 5^{-}\right]\right)=r 2$
 - $\operatorname{reg}\left(b,\left[4^{+}, 7^{-}\right]\right)=r 1$
@@ -368,17 +395,20 @@ $$
 <img src="Week5_Register_Allocation.assets/image-20210922170839953.png" alt="image-20210922170839953" style="zoom:50%;" />
 
 + T3 can fit in the whole of T1
-+ [TODO: check T2 and T4]
 
 
 
 #### Basic Extended Linear Scan Algorithm
 
-- Applicable to SFRA problem instance. [Q: what is SFRA?]
+[Q: example for this?]
+
+https://www.cs.rice.edu/~vs3/PDF/cc2007.pdf
+
+- Applicable to SFRA problem instance.
 - Will return:
   - Assignment of physical registers to variables for intervals $[P, Q]$, different physical registers may be assigned to the same variable in different intervals
   - with insertion of reg-reg move instructions to handle cases where .
-- Guaranteed to find a feasible solution if and only if one exists, with time and space complexity **linear** in size of input SFRA problem instance.
+- Guaranteed to find a feasible solution if and only if one exists, with ==time and space complexity **linear** in size of input SFRA problem instance.==
 - Intuition
   - Interference among live intervals is captured by whether or not they overlap.
     <img src="Week5_Register_Allocation.assets/image-20210922171246265.png" alt="image-20210922171246265" style="zoom:50%;" />
@@ -401,7 +431,7 @@ $$
     - If P is the starting point, allocate register (e.g. for variable v)
       - keep in the same register if:
         - If v is live before this interval
-        - If it is register copy [Q: what is register copy?]
+        - If it is register copy [A: what is register copy? from the end of an interval to the beginning of the other, we simply copy e.g. r1 = r1 to assign intervals, and this is an no-op]
       - Updates
         - Assign: $\operatorname{reg}(s,[P, y])=r_{j}$
         - Remove from available set: avail $=$ avail $\backslash\left\{r_{j}\right\}$

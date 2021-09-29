@@ -40,7 +40,7 @@ graph TD;
 
 ### Binding Time
 
-+ when source program gets lowerd in its level of abstraction until it’s suitable for execution
++  ==[Binding](https://en.wikipedia.org/wiki/Name_binding) is the act of associating properties with names==. Binding time is the moment in the program's life cycle when this association occurs, when source program gets lowerd in its level of abstraction until it’s suitable for execution
 
 + Phases
 
@@ -50,7 +50,7 @@ graph TD;
     + (static) Link: package modules together
   + Green: dynamic
     + (dynamic) Link: pull in dynamic libraries
-    + Interpret: actual execution (by physical or virtual machine)
+    + ==Interpret: actual execution== (by physical or virtual machine)
 
 + .c, .java, .py
 
@@ -58,8 +58,8 @@ graph TD;
 
 ### Languages, Grammars, Recognizers
 
-+ Language:  $\mathcal{L}$ , a set of strings over some alphabet $\Sigma$. Infinite
-+ Grammar: $\mathcal{G}(\mathcal{L})$, a formal system that provides a finite generative description of $\mathcal{L}$. Finite
++ ==Language (Infinite)==:  $\mathcal{L}$ , a set of strings over some alphabet $\Sigma$. 
++ ==Grammar (Finite)==: $\mathcal{G}(\mathcal{L})$, a formal system that provides a finite generative description of $\mathcal{L}$. 
 + Recognizer: $\mathcal{R}(\mathcal{L}, w)$, an automaton (i.e., machine) that can decide whether a given string belongs to language:  $w \in \mathcal{L}$.
 
 
@@ -111,7 +111,7 @@ graph TD;
 
 ## Architecture
 
-+ *Architecture*, as applied to computer systems, refers to a formal specification of an interface in the system, including the logical behavior of resources managed via the interface.
++ *Architecture*, as applied to computer systems, refers to a formal specification of an interface in the system, including the ==logical behavior of resources managed via the interface.==
 - Implementation describes the actual embodiment of an architecture.
 - *Abstraction levels* correspond to implementation layers, whether in hardware or software, each associated with its own interface or architecture.
 - We are assuming the standard von Neumann architecture.
@@ -138,11 +138,11 @@ $$\mathbb{A}=(\Sigma, \mathcal{J})$$
 
 - $\Sigma:$ Universe of machine states.
   - $\sigma=\left(\sigma_{M}, \sigma_{p}\right) \in \Sigma$ : An individual state.
-  - $\sigma_{M}$ : Memory state (value of each addressable memory unit in the useraccessible virtual address space).
-  - $\sigma_{P}$ : Processor state.
-    - Essential: Program counter (PC): $\mathcal{P}$
-    - Typical: A small amount of fast storage close to processor (registers) whose units are accessed by name.
-    - Optional: Condition flags
+  - $\sigma_{M}$ : ==Memory state== (value of each addressable memory unit in the useraccessible virtual address space).
+  - $\sigma_{P}$ : ==Processor state.==
+    - Essential: ==Program counter== (PC): $\mathcal{P}$
+    - Typical: A small amount of fast storage close to processor (==registers==) whose units are accessed by name.
+    - Optional: ==Condition flags==
 - $\mathcal{J}:$ Set of (user-level) machine instructions (for state transformation).
   - $\iota \in \mathcal{J}$ : An individual instruction that transforms an input state to an output state. $\iota: \Sigma \rightarrow \Sigma$.
 
@@ -152,13 +152,13 @@ $$\mathbb{A}=(\Sigma, \mathcal{J})$$
 + 0-operand machine,  "stack machine"
   - Operands come implicitly from the top items in a stack of values.
   - Java Virtual Machine.
-+ [Q] 1-operand machine, aka "accumulator machine"
++  1-operand machine, aka "accumulator machine"
   - Single implicit accumulator register that is both the left operand and the result. The right operand is specified explicitly.
   - Early machines, small microcontrollers (MOS 6502).
-+ [Q] 2-operand machine: source operand (and what gets updatd) +  
++  2-operand machine: source operand (and what gets updatd) +  
   - Two named operands, one of which also serves as the result.
   - x86-64
-+ [Q] 3-operand machine
++  3-operand machine
   - Three named operands, two for inputs, one for result.
   - ARMv8.
 
@@ -169,7 +169,7 @@ $$\mathbb{A}=(\Sigma, \mathcal{J})$$
   - Manipulates various memory areas at run time.
   - Does not assume any particular implementation technology, host hardware, or host operating system.
 + Orthogonal to the Java programming language
-  + Program unit is a class file (binary file).
+  + ==Program unit is a class file (binary file).==
     - Contains bytecodes and a symbol table.
     - Must satisfy strong syntactic and structural constraints for security.
   - Other language can run on JVM: Any language that can be expressed in terms of a valid class file can be hosted on the JVM, e.g., Groovy, Kotlin, Scala, Clojure.
@@ -259,13 +259,13 @@ Installation on M1
 
 #### Components
 
-+ All data is stored in the stack or the heap.
++ All data is stored in the ==stack or the heap.==
   - No data registers. Three control registers (PC, SP, FBR).
 - Stack also contains addresses.
 - Stack pointer (SP) points to the first free location in the stack.
 - Stack grows upwards from location $0 .$
 + Atomic types and addresses take one stack location. (elements of fixed size)
-  - Strings and objects are stored in the heap.
+  - ==Strings and objects are stored in the heap.==
 
 ## Operations
 
@@ -348,7 +348,7 @@ init: [x]
 2. JUMPC 5
    + true branch: jump to STOP
    + false branch: move to next
-3. PUSHIMM -1: [x | -1] [Q: does all operations except for DUP automatically replace the TOS value?]
+3. PUSHIMM -1: [x | -1] [A: does all operations except for DUP automatically replace the TOS value? JUMPC, binop, unop, JUMPIND … consume TOS value]
 4. TIMES: [-x] 
 5. STOP: pop TOS and finish
 
@@ -367,7 +367,7 @@ x <= 0 case: 0, 1, 2, 3, 4, 5
   + Linkage info: allows control between activating Q and P , FBR points to the saved FBR of current active frame
     + FBR + (on top of) : local variables & saved PC
     + FBR - (below) : parameters & return value
-  + <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826090332787.png" alt="image-20210826090332787" style="zoom:67%;" />
+  + <img src="Week1_LiveOak_SaM.assets/image-20210826090332787.png" alt="image-20210826090332787" style="zoom:67%;" />
 
 ```c
 int power(int b, unsigned p){
@@ -376,7 +376,7 @@ int power(int b, unsigned p){
 }
 ```
 
-<img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826090613366.png" alt="image-20210826090613366" style="zoom:67%;" />
+<img src="Week1_LiveOak_SaM.assets/image-20210826090613366.png" alt="image-20210826090613366" style="zoom:67%;" />
 
 #### Control registers
 
@@ -407,7 +407,7 @@ Always point to TOS empty stack cell
   - push FBR to SP, then update FBR with current SP
   - similar to PUSHFBR, but also updates FBR to the SP location before incrementing
   - Stack[SP] <- FBR; <u>FBR <- SP</u>; SP <- SP-1
-  - <img src="/home/arkyyang/files/SIMPL/SIMPL-Notes/Week1_LiveOak_SaM.assets/image-20210826093916877.png" alt="image-20210826093916877" style="zoom:67%;" />
+  - <img src="Week1_LiveOak_SaM.assets/image-20210826093916877.png" alt="image-20210826093916877" style="zoom:67%;" />
 
 ##### Program Counter (PC)
 
@@ -423,6 +423,6 @@ Call at position _n_, return at position _n+1_
   + pop off stack, PC goes to the address pointed by current top stack value (should be "saved PC")
   + SP <- SP -1; PC <- Stack[SP]
 + **JSRIND** (_label_ is put on stack, not part of instruction)
-  + temp <- Stack[SP]; Stack[SP] <- PC + 1; PC <- temp [Q: what is temp?]
+  + temp <- Stack[SP]; Stack[SP] <- PC + 1; PC <- temp [A: what is temp? Stack[SP] from beginning, temp is just a temp variable used in implementation of the SaM machine]
 
 - 

@@ -5,9 +5,9 @@
 ### Front-end vs back-end:
 
 + Front-end: analysis + (optimization)
-  + Lexical Analysis: Scanning, character stream (concrete syntax, source code) => **token stream**. (concrete syntax) e.g. `‘if’ '(' 'b' '==' '0' ')' 'a' '=' 'b' ';'`
-  + Syntactic Analysis: Parsing, token stream => **Abstract Syntax Tree (AST)**. e.g. `(if ( (==, (b, 0)), (=, (a, b))))`
-  + Semantic Analysis [Q: what is this?]
+  + ==Lexical Analysis: Scanning, character stream (concrete syntax, source code) => **token stream**.== (concrete syntax) e.g. `‘if’ '(' 'b' '==' '0' ')' 'a' '=' 'b' ';'`
+  + ==Syntactic Analysis: Parsing, token stream => **Abstract Syntax Tree (AST)**.== e.g. `(if ( (==, (b, 0)), (=, (a, b))))`
+  + Semantic Analysis [A: what is this? the third phase of [Compiler](https://www.geeksforgeeks.org/introduction-compiler-design/). uses syntax tree and symbol table to check whether the given program is semantically consistent with language definition. Type, reserved keywords, undeclared variables]
 + Back-end: synthesis of machine instructions
 
 
@@ -34,7 +34,7 @@ https://www.seas.upenn.edu/~cit596/notes/dave/cfg0.html
 
   - $T$ is a set of terminals (tokens), $L(G) \sube T^{*}$, $N \cap T=\Phi$
 
-  - $P$ is a finite set of productions (rewrite rules) of the form $A \rightarrow \alpha$, where A is non-terminal and $\alpha$ is a string of terminals and non-terminals (**sentential form**)
+  - $P$ is a finite set of productions (rewrite rules) of the form $A \rightarrow \alpha$, where A is non-terminal and $\alpha$ is sentential form (a string of terminals and non-terminals)
 
     - $$
       \begin{gathered}
@@ -112,7 +112,7 @@ https://www.seas.upenn.edu/~cit596/notes/dave/cfg0.html
 
 ### LL(1) Grammar
 
-Allows deterministic leftmost derivations using look-ahead of 1 token. Such top-down parser is **recursive-descent parser** [Q: does it have to be LL(1) or k can be other numbers?]
+Allows deterministic leftmost derivations using look-ahead of 1 token. **recursive-descent parser** [A: does it have to be LL(1) or k can be other numbers?  A form of recursive-descent parsing that does not require any back-tracking is known as predictive parsing, it handles LL(k) grammar]
 
 Grammar: $\mathrm{E} \rightarrow(\mathrm{E}+\mathrm{E}) \mid$ num
 
@@ -146,7 +146,7 @@ Grammar: $\mathrm{E} \rightarrow(\mathrm{E}+\mathrm{E}) \mid$ num
   - But it can be converted into an **equivalent** ( $L\left(G_{1}\right)=L\left(G_{2}\right)$) LL(1) grammar., with left-factoring
     - Factor the common prefix $\mathrm{E}$ of $\mathrm{S}$.
     - Add a new non-terminal $S$ ' for what follows that prefix.
-    - [Q: what’s the $\epsilon$ here?]
+    - [A: what’s the $\epsilon$ here? empty, or error]
     - ![image-20210901093223371](Week2_Parsing.assets/image-20210901093223371.png)
 
 ## Implementation of Recursive-Descent Parser
@@ -154,9 +154,9 @@ Grammar: $\mathrm{E} \rightarrow(\mathrm{E}+\mathrm{E}) \mid$ num
 - Input: $L L(1)$ grammar $G=(N, T, P, S)$
 - The global variable token contains the look-ahead token.
 - One method for each non-terminal $n \in N$
-  - Pre-condition: Variable token has look-ahead token. [Q: what does the ‘condition’ mean? END token?]
+  - Pre-condition: Variable token has look-ahead token. [A: what does the ‘condition’ mean? END token? Not important…]
   - Action: Consume a sequence of terminals that can be derived from $n$.
-  - Post-condition: Variable token has look-ahead token.
+  - Post-condition: Variable token has look-ahead token. e.g. ‘)’
   - The methods are mutually recursive.
 - The method body is a big switch statement. Each case of the switch:
   - Handles one possible look-ahead token (say, $t \in T)$.
@@ -165,6 +165,8 @@ Grammar: $\mathrm{E} \rightarrow(\mathrm{E}+\mathrm{E}) \mid$ num
 
 
 ### Predictive Parsing Table -> Parser
+
+[TODO(midterm): try deriving the table, parsing tree, and code for this example.]
 
 + Row for each non-terminal, column for each terminal and END symbol ($)
 + Table[r, c] to expand non-terminal r with look-ahead token c
@@ -510,9 +512,9 @@ ADDSP -n // remove all parameter slots
 	ADDSP c // total c local variables
 	[Code for B] // execution
 fEnd:
-	STOREOFF r // store TOS value to (FBR + r) where the return slot is, from caller [Q: whether r always == -1, how do we know where return slot is when declaring the method?]
+	STOREOFF -(n+1) // store TOS value to (FBR - numParams - 1) where the return slot is, from caller
 	ADDSP -c // remove local varable slots, then TOS is saved PC (rv) (line after return from JSR f)
-	JUMPIND // put return value to (rv)
+	JUMPIND // jump to instruction after func call
 ```
 
 #### Return

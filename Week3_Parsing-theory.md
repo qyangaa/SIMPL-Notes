@@ -31,7 +31,7 @@
 
 #### Problem statement
 
-- Decide whether the production $A \rightarrow \alpha$ of the context-free grammar $G=(N, T, P, S)$ is a candidate for rewriting $A$ when the input token is $t$, i.e., whether $A \rightarrow \alpha \in$ ParsingTable $[A, t]$.  [Q: what is A and what is $\alpha$? Are they just anything belong to $\Sigma$ ?]
+- Decide whether the production $A \rightarrow \alpha$ of the context-free grammar $G=(N, T, P, S)$ is a candidate for rewriting $A$ when the input token is $t$, i.e., whether $A \rightarrow \alpha \in$ ParsingTable $[A, t]$.  [A: what is A and what is $\alpha$? Are they just anything belong to $\Sigma$ ? A: the nonterminal, $t$ : the next token,  $A \rightarrow \alpha$ means the next token allows the production] 
 
 #### Term definitions
 
@@ -58,7 +58,7 @@ $$
 &\mathrm{S} \rightarrow \mathrm{A} \mathrm{B} \$ \\
 &\mathrm{A} \rightarrow x \mathrm{a} \mathrm{A} \\
 &\mathrm{A} \rightarrow \mathrm{y} \mathrm{a} \mathrm{A} \\
-&\mathrm{A} \rightarrow \lambda \\
+&\mathrm{A} \rightarrow \lambda (empty)\\
 &\mathrm{B} \rightarrow \mathrm{b}
 \end{aligned}
 $$
@@ -89,8 +89,8 @@ $$
         + for a production, any symbol that belongs to the FIRST of the right hand side also belongs to the first of the left hand side
         + If Y1 is not nullable, then f is the FIRST(Y1). If Y1 is nullable, then might need to look at FIRST(Y2)
   + Helper function $+_{1}: 2^{F} \times 2^{F} \rightarrow 2^{F}$ is a binary helper function on subsets of $F$ defined thus:
-    + Concatenate each element of the first set with each element of the second set, and truncate first symbol of the resulting string
-    + I.e., $\{\varepsilon, a, b\}+{ }_{1}\{\varepsilon, c\}=\{\varepsilon, a, b, c\}$  [Q: where in this definition asks for omitting $\epsilon$ in the second string? In what case do we omit? and why are we not tuncating the first $\epsilon$ in the resulting string?] , but $\{\varepsilon, a, b\}+{ }_{1}\{c\}=\{a, b, c\}$.
+    + ~~Concatenate each element of the first set with each element of the second set, and truncate first symbol of the resulting string~~
+    + I.e., $\{\varepsilon, a, b\}+{ }_{1}\{\varepsilon, c\}=\{\varepsilon, a, b, c\}$  [A: where in this definition asks for omitting $\epsilon$ in the second string? In what case do we omit? and why are we not tuncating the first $\epsilon$ in the resulting string? IGNORE the definition above, if only looking at concatenation and derive FIRST, $\varepsilon + \varepsilon = \varepsilon$, ==if current set has $\varepsilon$ , add all elements of next sets except for $\varepsilon$ to FIRST, and so on==] , but $\{\varepsilon, a, b\}+{ }_{1}\{c\}=\{a, b, c\}$.
 
 + $\operatorname{FOLLOW}(\alpha) \subseteq T'$: the set of terminals (and/ or $, but no λs) that can appear immediately after  **non_terminal A** in some partial derivation
   $$
@@ -103,7 +103,7 @@ $$
 
     + base case:
 
-      + $\$ \in F O L L O W(S)$ [Q: can start symbol by default always be followed immediately by EOS? Is that by definition?]
+      + $\$ \in F O L L O W(S)$ [A: can start symbol by default always be followed immediately by EOS? Is that by definition? Yes for the augmentation method]
 
     + Induction:
 
@@ -111,10 +111,10 @@ $$
 
         $\left(t \in \operatorname{FIRST}\left(Y_{1} \cdots Y_{m}\right)+{ }_{1}\right.$ FOLLOW $\left.(A)\right) \Rightarrow t \in F O L L O W(B)$: 
 
-        ​	first of non-terminals following B will be FOLLOW(B)
-        ​	if that first is empty, then FOLLOW(A) is also FOLLOW(B) [Q: why? isn’t FOLLOW(A) just FIRST(B)? isn’t this case be the case in which FIRST(B) is empty?]
+        ​	 ====add FIRST(all non-terminals following B in the production) to FOLLOW(B)== 
+        ​	if that FIRST is empty, add FOLLOW(A) to FOLLOW(B)==   [A: here A is not preceding B, but producing B, thus if all non-terminals following B are empty, then B is the last non-terminal of A’s production, then FOLLOW(A) can be added to FOLLOW(B)]
 
-+ $N U L LABLE(\alpha)$ : a predicate, $\alpha \stackrel{*}{\Longrightarrow} \varepsilon$, i.e. production A -> empty string. The production is still a candidate if $S \stackrel{*}{\Longrightarrow} \eta A t \xi$. [Q: what does each term mean here and what does this production mean?]
++ $N U L LABLE(\alpha)$ : a predicate, $\alpha \stackrel{*}{\Longrightarrow} \varepsilon$, i.e. production A -> empty string. The production is still a candidate if $S \stackrel{*}{\Longrightarrow} \eta A t \xi$. [A: what does each term mean here and what does this production mean? just some random stuff, not important]
   $$
   \Sigma^* \rightarrow \{true, false\}\\
   N U L L A B L E(\alpha)=\text { true iff } \alpha \stackrel{*}{\Rightarrow} \varepsilon
@@ -157,6 +157,7 @@ repeat{
 
 #### Example
 
+[TODO(midterm): practice deriving this]
 $$
 \begin{aligned}
 &\mathrm{S} \rightarrow \mathrm{A} \$ \\
@@ -194,20 +195,24 @@ i.e. if t = FIRST(RHS) is non-nullable, then add the production to `table[A][t]`
 
 Using the example above:
 
-[TODO: practice deriving this]
+[TODO(midterm): practice deriving this]
 
-[Q: why B->t|e not in `table[B][t]`?]
+https://www.youtube.com/watch?v=atdLIZ5keXA&t=507s
+
+![image-20210924153917612](Week3_Parsing-theory.assets/image-20210924153917612.png)
+
+[A: why B->t|e not in `table[B][t]`? added, the original table missed all the N-> T entries]
 
 |      | x    | t    | v             | $             |
 | ---- | ---- | ---- | ------------- | ------------- |
-| S    | A$   | A$   | A$            | A$            |
-| A    |      | BC   | BC            |               |
-| B    |      |      | $\varepsilon$ | $\varepsilon$ |
-| C    |      |      |               | $\varepsilon$ |
+| S    | A$  | A$      |A$|A$|
+| A    | x | BC   | BC            | BC |
+| B    |      | t | $\varepsilon$ | $\varepsilon$ |
+| C    |      |      | v | $\varepsilon$ |
 
 ### Parsing tables for Non-LL(1) Grammars
 
-**Multiple productions** will map to the same entry of the parsing table, indicating a **conflict**, i.e., insufficient information to pick the next production with certainty.
+==**Multiple productions** will map to the same entry of the parsing table, indicating a **conflict**, i.e., insufficient information to pick the next production with certainty.==
 $$
 \begin{aligned}
 &\text { - Consider the grammar } \\
@@ -243,8 +248,10 @@ $$
   - The issue is that the memory of the prefix examined and processed has to retain more information than just the path-oblivious (aka "Markovian") summary that the FA model allows.
   - This ultimately stems from the difference between the right-hand sides of productions (the unrestricted $A \rightarrow \alpha$ vs. the restricted $A \rightarrow w B)$. 
   - However, because the left-hand sides of productions are single nonterminals (i.e., **context-free**, i.e.: Single ‘A’ non terminal on the left hand side means we don’t need context for the non-terminal in the production) , this information can be organized in a **LIFO manner**, i.e., using a stack.
-  - So our table-driven predictive parser will work using a parsing stack, in addition to the input tape and the parsing table.
+  - So our table-driven predictive parser will work using a **parsing stack**, in addition to the input tape and the parsing table.
 - Procedure
+  - ignore following description, watch this video for an example: https://www.youtube.com/watch?v=dnYVOymOBw8
+    ![image-20210924153810068](Week3_Parsing-theory.assets/image-20210924153810068.png)
   - Initialize the parsing stack to $[\$, S]$, with $S$ being at TOS.
   - At each step, act based on the **TOS** symbol $X$ and the **input token** $a$.
     - If $X=a=\$$, halt; the parse is successful.
@@ -254,7 +261,7 @@ $$
       - If ParsingTable $[X, a]=X \rightarrow Y_{1} \cdots Y_{k}$
         - Pop the stack.
         - $\operatorname{Push}\left(Y_{k}\right) \ldots \operatorname{Push}\left(Y_{1}\right)$
-        - [Q: next step: `Parsingtable[Y1,a]`? ]
+        - [A: next step: `Parsingtable[Y1,a]`? see the youtube example for detailed process]
       - If ParsingTable $[X, a]$ is empty, there is an error in the input.
 
 
@@ -274,7 +281,7 @@ $$
 | Non-deterministic vs. Deterministic | similar in power                        | Non-deterministic PDAs are more powerful than deterministic PDAs. |
 | Memory                              | finite state + finite memory            | finite state + unbounded memory                              |
 | Tool                                | Table                                   | Table + pushdown stack (unbounded memory)                    |
-| Mapping                             | actions taken for $(X, a)$ combinations | mappings from $Q \times F \times \Gamma$ to finite subsets of $Q \times \Gamma^{*}$. [Q: explain?] |
+| Mapping                             | actions taken for $(X, a)$ combinations | mappings from $Q \times F \times \Gamma$ to finite subsets of $Q \times \Gamma^{*}$. [A: explain? look at youtube example] |
 
 ### Graphical representation - Grammar Flow Graph (GFG)
 
@@ -295,6 +302,18 @@ For language L={bbb}:
 
 #### Terminology
 
+https://www.youtube.com/watch?v=JtRyd7Svlew
+
+![image-20210924155231881](Week3_Parsing-theory.assets/image-20210924155231881.png)
+
+![image-20210924155350582](Week3_Parsing-theory.assets/image-20210924155350582.png)
+
+![image-20210924155725713](Week3_Parsing-theory.assets/image-20210924155725713.png)
+
+![image-20210925094028697](Week3_Parsing-theory.assets/image-20210925094028697.png)
+
+2 cases where PDA accepts: reach a final state / or stack is empty
+
 - Grammar: a CFG $G=(N, T, P, S)$
   - $N$: non-terminals
   - $T$: terminals ($w$)
@@ -304,11 +323,11 @@ For language L={bbb}:
   - $V$: nodes ($v$)
   - $E$: edges
   - $R$: return nodes  ($k$)
-- A configuration is a triple $\langle v, k, w\rangle$ with $v \in V, k \in R^{*}, w \in$ $T^{*} \times T^{*}$ ("node-stack-input").[Q: why $k$ means stack and $w$ means input?]
+- A configuration is a triple $\langle v, k, w\rangle$ with $v \in V, k \in R^{*}, w \in$ $T^{*} \times T^{*}$ ("node-stack-input").[A: $k$ means stack and $w$ means input?]
 - Initial configuration: $\langle\cdot S,[], s\rangle$, where $s$ is the input string.
 - Accepting configuration: $\langle S \bullet \square, s \bullet\rangle$
 - The transition function depends on the node type. (TOS is on the left hand side of [ ])
-  - Start node: $\langle\cdot B, k, w\rangle \Rightarrow\langle B \rightarrow \bullet \beta, k, w\rangle$ (non-deterministic choice). [Q: what is the k here?]
+  - Start node: $\langle\cdot B, k, w\rangle \Rightarrow\langle B \rightarrow \bullet \beta, k, w\rangle$ (non-deterministic choice). [A: what is the k here? Stack element]
   - Exit node: $\langle B \rightarrow \beta \cdot k, w\rangle \Rightarrow\langle B \cdot, k, w\rangle$.
   - Scan node: $\langle A \rightarrow \alpha \cdot t \gamma, k, u \cdot t v\rangle \Rightarrow\langle A \rightarrow \alpha t \cdot \gamma, k, u t \cdot v\rangle$
   - Call node: $\langle A \rightarrow \alpha \cdot B \gamma, k, c\rangle \Rightarrow\langle\cdot B,[A \rightarrow \alpha B \bullet \gamma, k], c\rangle$.
@@ -318,17 +337,34 @@ For language L={bbb}:
 #### Properties of the NGA
 
 - The NGA is a special kind of PDA.
-- Paths traversed in the GFG by the NGA are **complete balanced paths**.
-  - Complete: Goes from• $S$ to $S \bullet$ start to final node
-  - Balanced: Call and return nodes are correctly matched.
+- ==Paths traversed in the GFG by the NGA are **complete balanced paths**.==
+  - ==Complete: Goes from• $S$ to $S \bullet$ start to final node==
+  - ==Balanced: Call and return nodes are correctly matched.==
 - Theorems: 
   - `path <-> parse tree`: Every complete balanced path corresponds to a parse tree, and every parse tree has a corresponding complete balanced path.
   - `path <-> sentence label`:The label of every complete balanced path is a sentence generated by the grammar, and every sentence generated by the grammar corresponds to the label of a complete balanced path.
-- An **unambiguous grammar** is one in which every string in the language of the grammar is generated by **exactly one complete balanced path**.
+- ==An **unambiguous grammar** is one in which every string in the language of the grammar is generated by **exactly one complete balanced path**.==
 
 
 
 ### Earley Algorithm
+
+https://www.youtube.com/watch?v=7UsVbTzx_54
+
+#### From Youtube
+
++ 3 operations:
+  + predict: expand next element to be processed, eg. .S -> .NP VP
+  + Scan: check for correct terminal match and consume an input e.g. N->.papu => N->papu.
+  + complete: after scanning, come back to move dot over one non-terminal (may be a chain reaction). e.g. NP->N., NP -> NP. PP … 
++ Example [TODO(midterm): try this]
+  + <img src="Week3_Parsing-theory.assets/image-20210925095642280.png" alt="image-20210925095642280" style="zoom:50%;" /> 
+  + Row: input, column: level of prediction, from bottom up
+    ![image-20210925101501986](Week3_Parsing-theory.assets/image-20210925101501986.png)
+
+<img src="Week3_Parsing-theory.assets/image-20210925101529311.png" alt="image-20210925101529311" style="zoom:50%;" />
+
+#### Ignore the lecture
 
 - **globally angelic nondeterminism**: The non-determinism in the NGA
   - For a given grammar and input string in the language generated by that grammar, the non-deterministic NGA transitions at start nodes have to ensure that the NGA ultimately reaches $S \cdot$ along a complete balanced path that generates the input string. (Complete)
@@ -355,7 +391,6 @@ For language L={bbb}:
   + if I can find a $s. \in \Sigma_3$ , then there is a complete path from $.s$ to $s.$ i.e. $.s \stackrel{*}{\Longrightarrow} s.$
 + $\varepsilon$ closure doesn’t work because $S.$ can be reached with $bb$, which doesn’t belong to language
 + Earley algorithm: keep a tag on  the depth of the call stack
-  + [Q: what’s the condition for incrementing and decrementing the tag level? How does the algorithm indicate whether `d` or `k` are allowed to pop level from `g`?]
 
 ![image-20210908174653343](Week3_Parsing-theory.assets/image-20210908174653343.png)
 

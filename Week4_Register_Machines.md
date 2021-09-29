@@ -1,4 +1,4 @@
-# 3Intro to Register Machines
+3Intro to Register Machines
 
 ### Basics
 
@@ -60,8 +60,6 @@
 + Memory state
   + Memory $(\mathrm{M}[\mathrm{J})$.
 
-
-
 ### C and intel terminologies
 
 $$
@@ -92,7 +90,7 @@ $$
   - GAS (GNU Assembler) https://www.gnu.org/software/binutils/
   - FASM (Flat Assembler) http://flatassembler,net/download.php
 
-### General purpose rgisters in x86
+### General purpose registers in x86
 
 + Name table
 
@@ -183,8 +181,8 @@ $$
   - $\mathrm{S}$ and D can't refer to memory locations simultanously. No direct memory to memory transfer (M<-M), only R<-I, M<-I, R<-R, M<-R, R<-M
     - workaround:  R<-M + M<-R
   - If $S$ is immediate, it is at most 32 bits wide.
-    - workaround: `MOVABSQ I, R`: To handle a full 64 -bit immediate source operand.
-- Eg. `MOVQ 0xFFFFFFFF, %rax`, `0xFFFFFFFF` because %rax is 8 bites, the immediate only occupy least siginificant 4 bytes, and most siginificant 4 bytes will be zero (`FF` takes 1 byte)
+    - ==workaround: `MOVABSQ I, R`: To handle a full 64 -bit immediate source operand.==
+- Eg. `MOVQ 0xFFFFFFFF, %rax`, `0xFFFFFFFF` because %rax is 8 bytes, the immediate only occupy least siginificant 4 bytes, and most siginificant 4 bytes will be zero (`FF` takes 1 byte)
 
 
 
@@ -194,7 +192,7 @@ $$
 
 - Widths of source and destination are encoded by the ASM suffix of the opcode.
 
-  - MOVZ: zero extend (MOVQ handles MOVZLQ) [Q: what happens if we MOVL to a 8 byte D? And why does MOVQ do the filling that automatically but not for others?]
+  - MOVZ: zero extend (MOVQ handles MOVZLQ) [A: why no MOVZLQ? the effect of movzlq can be achieved by movl, due to the rules of l-to-q zero-extension.]
     $$
     \begin{aligned}
     &\text { - } \operatorname{MOVZ}\left\{\begin{array}{c}
@@ -207,7 +205,6 @@ $$
     \end{aligned}
     $$
     
-
   - MOVS: SignExtend, with two-complement
     $$
     \begin{aligned}
@@ -222,10 +219,10 @@ $$
     &\text { - CLTQ: } \% \text { rax } \leftarrow \text { SignExtend(\%eax) }
     \end{aligned}
     $$
-
+  
     - CLTQ: extend from eax to rax
-
-- **Variable length** of x86 instructions: Different instructions take different number of byte to encode (e.g. CLTQ 1 byte)
+  
+- ==**Variable length** of x86 instructions: Different instructions take different number of byte to encode (e.g. CLTQ 1 byte)==
 
 
 
@@ -260,11 +257,11 @@ $$
 + Shift: k is an immediate
   + Right shifts:
     + Arithmetic shifts (sar, shr): fill most significant bit with sign bit of D
-    + Logicak shift (sal, shl): fill with 0
+    + Logical shift (sal, shl): fill with 0
   + Left shift always fill with 0
-  + Shift amount k can be
-    - Immediate: if know in compile time
-    - Register `%cl`: if not known in compile time, have to use register `cl` , only the necessary number of lower-order bits (as determined by the ASM suffix of the opcode) are used: 3 for $B, 4$ for $W$, 5 for $\mathrm{L}, 6$ for $Q$.
+  + ==Shift amount k can be==
+    - ==Immediate: if know in compile time==
+    - ==Register `%cl`: if not known in compile time, have to use register `cl` , only the necessary number of lower-order bits (as determined by the ASM suffix of the opcode) are used: 3 for $B, 4$ for $W$, 5 for $\mathrm{L}, 6$ for $Q$.==
 
 ### LEAQ
 
@@ -313,7 +310,7 @@ $$
 
   + SF: Sign Flag (result negative)
 
-  + OF: Overflow Flag (the operation cause a two's-complement overflow, either positive or negative) [Q: will we be tested on two-complements calculation or only conceptual understanding is fine?]
+  + OF: Overflow Flag (the operation cause a two's-complement overflow, either positive or negative) [A: will we be tested on two-complements calculation or only conceptual understanding is fine? Exam will likely be take home so we have time to review if needed]
 
     ```
     If 2 Two's Complement numbers are added, and they both have the same sign (both positive or both negative), then overflow occurs if and only if the result has the opposite sign. Overflow never occurs when adding operands with different signs.
@@ -342,14 +339,15 @@ $$
 
 ##### Explicit Setting of status flags
 
-- arithmetic: `cmp X S1, S21` : Sets status flags based on the value of $\mathrm{S}_{2}-\mathrm{S}_{1}$ but discards the value.
+- arithmetic: `cmp X S1, S2` : Sets status flags based on the value of $\mathrm{S}_{2}-\mathrm{S}_{1}$ but discards the value.
+  <img src="Week4_Register_Machines.assets/image-20210927095619738.png" alt="image-20210927095619738" style="zoom:50%;" />
 - logical: `testX S1, S2`: Sets status flags based on the value of $\mathrm{S}_{2} \& \mathrm{~S}_{1}$ but discards the value.
 - $\mathrm{X} \in\{\mathrm{B}, \mathrm{W}, \mathrm{L}, \mathrm{Q}\}$
 - Only “-” and “&” operations
 
 ##### Accessing or Using Status Flags
 
-- Usually not accessed directly, but through a set of conditions (CND) that are combinations of the status flag values and correspond to typical tests needed in compiling programming language constructs.
+- ==Usually not accessed directly, but through a set of conditions (CND) that are combinations of the status flag values and correspond to typical tests needed in compiling programming language constructs.==
 - Three instructions
   - `setCND D`: Set a single destination byte specified by D (which can be either in register or in memory) to 0 or 1 depending on a combination of status flags specified by CND.
 
@@ -385,15 +383,13 @@ $$
 - Two forms at assembly-language level: direct and indirect.
   - Direct: jmp $\mathrm{L}$, where $\mathrm{L}$ is a label. `PC -> L`
     - At machine code level, the instruction has a large number of variants, and the label is translated into an absolute or relative offset from `%rip`.
-  - Indirect: jmp $* \mathrm{D}$, where $\mathrm{D}$ is a register or memory format operand specifier. `PC -> M[EA(D)] = L`
+  - ==Indirect: jmp $* \mathrm{D}$, where $\mathrm{D}$ is a register or memory format operand specifier==. `PC -> M[EA(D)] = L`
     - No indirect conditional jumps.
-    - used for switch statements (with jump table)
+    - ==used for switch statements (with jump table)==
 
 
 
 # Procedural Linkage (method invocation)
-
-[TODO: review back and summarize the difference between different architecture procedural linkages]
 
 ## X86
 
@@ -450,25 +446,28 @@ $$
 
 ### Architecture
 
-![image-20210916153014418](Week4_Register_Machines.assets/image-20210916153014418.png)
+https://www.youtube.com/watch?v=uS4KO-rpvsU
+
+![image-20210928154913956](Week4_Register_Machines.assets/image-20210928154913956.png)
+
+<img src="Week4_Register_Machines.assets/image-20210928154617050.png" alt="image-20210928154617050" style="zoom:50%;" />
 
 #### Procedure linking information - pointers
 
-- ` %RBP`The stack-frame base pointer: identifies a fixed reference point within the stack frame for the called procedure. (FBP for SAM)
-- `%RIP`: return-instruction pointer (RIP): instruction in calling procedure which should be resumed after called procedure returns
+- ==` %RBP`The stack-frame base pointer: identifies a fixed reference point within the stack frame for the called procedure. (FBP for SAM)==
+- ==`%RIP`: return-instruction pointer (RIP): instruction in calling procedure which should be resumed after called procedure returns==
 
 #### Procedure calls are supported with CALL and RET instructions.
 
 - CALL:
   - `Stack <- R[%rip]` : Pushes the current value of %RIP on the stack. 
-    - Prior to branching to the first instruction of the called procedure, the CALL instruction pushes the address in the %RSP register onto the current stack. 
   - `%rip <- offset`: Loads the offset of the called procedure in %RIP.
   - Begins execution of the called procedure.
 - RET:
   - `%rip <- Stack`: Pops the TOS value (the return instruction pointer) into %RIP.
     - Upon returning from a called procedure, the RET instruction pops the RIP from the stack back into the %RSP register. Execution of the calling procedure then resumes.
   - If the RET has an optional argument $n$, increments %RSP by $n$.
-  - Resumes execution of the calling procedure. [Q: PC -> RIP?]
+  - Resumes execution of the calling procedure. [A: PC -> RIP? correct!]
 
 #### Pass Parameters (or results) 
 
@@ -531,6 +530,8 @@ To %rax, %rdx
 <img src="Week4_Register_Machines.assets/image-20210915134619544.png" alt="image-20210915134619544" style="zoom:50%;" />
 
 - Stack Frame
+  
+  - https://www.youtube.com/watch?v=-52uAgw60yM
   - Grows downwards from high addresses.
   - The end of the input argument area shall be aligned on a 16 -byte boundary.
   - Once control has been passed to the function entry point, %rsp points to the return address, and the value of $(\%rs p+8)$ is a multiple of 16 .
@@ -538,7 +539,7 @@ To %rax, %rdx
     - Therefore, functions may use this area for temporary data that is not needed across function calls. 
     - In particular, leaf functions may use this area for their entire stack frame (function that does not call others), rather than adjusting the stack pointer in the prologue and epilogue. 
   - The conventional use of %rbp as a frame pointer for the stack frame may be avoided by using %rsp (the stack pointer) to index into the stack frame. This technique saves two instructions in the prologue and epilogue and makes one additional GPR (%rbp) available.
-
+  
 - Parameter Passing [Simplified]
 
   - Arguments are classified into multiple classes based on size.
@@ -546,10 +547,11 @@ To %rax, %rdx
     - **MEMORY**: Types that will be passed and returned in memory via stack.
   - Once arguments are classified, the registers get assigned (in left-to-right order) for passing as follows:
     - INTEGER, 
-      - the next available register of the sequence %rdi, %rsi, %rdx, %rcx, %r8, %r9 is used. [Q: if more than 6, just use memory?]
+      - the next available register of the sequence %rdi, %rsi, %rdx, %rcx, %r8, %r9 is used. [A: if more than 6, just use memory? correct]
       - Once registers are assigned, the arguments passed in memory are pushed on the stack in reversed (right-to-left) order.
     - MEMORY, 
       - pass the argument on the stack at an address respecting the argument's alignment (which might be more than its natural alignment).
+  
 - Returning of Values [Simplified]
   - INTEGER, the next avallable register of the sequence %rax, %rdx is used.
 
