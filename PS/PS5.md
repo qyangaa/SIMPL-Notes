@@ -150,7 +150,7 @@ int foo(int argc, int argv[]) {
     default: return -1;
 ```
 
-(a) Show the layout of the stack frame for foo. Indicate each of the four areas of the stack frame, how much each area takes, and the total size of the stack frame. [Q: what are 4 areas of stack frame? Aren’t they describing assembly code blocks rather than stack frame of the function itself?]
+(a) Show the layout of the stack frame for foo. Indicate each of the four areas of the stack frame, how much each area takes, and the total size of the stack frame. [Q: what are 4 areas of stack frame? Aren’t they describing assembly code blocks rather than stack frame of the function itself? Ask for solution]
 
 ```
 Prologue: 

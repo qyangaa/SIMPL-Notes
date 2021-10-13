@@ -22,7 +22,7 @@
 
 - These languages abstract semantic analysis problems.
   - $L_{1}$ : identifiers are declared before their use in a program.
-  - $L_{2}$ :  number of formal parameters in the declaration of a procedure agrees with the numbe\} of actual arguments in a use of the procedure.
+  - $L_{2}$ :  number of formal parameters in the declaration of a procedure agrees with the number of actual arguments in a use of the procedure.
 - Why not use context-sensitive grammars?
   - The problem of parsing a context-sensitive grammar is PSPACEcomplete.
   - Even a CSG would have difficulty (or outright lack the power) to effective encode typical semantic analysis problems.
@@ -65,10 +65,10 @@
 
 ### Judgments and Typing Rules
 
-- Typing rules contain judgments of the form $E \Rightarrow e: T$, 
+- ==Typing rules contain judgments of the form $E \Rightarrow e: T$,== 
   -  $E$ is an environment containing, for example, the types of identifiers and functions.
   - e: expression
-  -  "In the environment $E$, expression $e$ has type $T$”
+  -  "==In the environment $E$, expression $e$ has type $T$”==
 - Break into $F$ , signature, and $G$, context
   - The signature shows the types of functions
   - The context shows the types of variables.
@@ -82,7 +82,7 @@ $$
   + J1… Jn: premises 
   + C: condition
   + J: conclusion
-  + Read the rule as "From the judgments $J_{1}$ through $J_{n}$, if condition $C$ holds, conclude $J$ :"
+  + Read the rule as "==From the judgments $J_{1}$ through $J_{n}$, if condition $C$ holds, conclude $J$ :"==
   + Judgments expressed in formal language; condition in natural language.
 
 ### Examples of Typing Rules and Derivations
@@ -254,33 +254,33 @@ Two reference types are the **same run-time type** if:
 - Programming languages based on the idea that functions, and hence their operands and results, have unique types are said to be **monomorphic**.
   - Every value and variable in a program can be interpreted to have one, and only one type.
 - Programming languages in which some values and variables in a program may have more than one type are said to be **polymorphic**.
-  - **Polymorphic functions: Functions whose operands can have more than one type.**
-    - E.g., length: List $\alpha \rightarrow$ int in Haskell 2010 .
-  - **Polymorphic types: Types whose operations are applicable to values of more than one type.**
-    - E.g., the abstract base class numbers. Number in Python $3 .$
+  - ==**Polymorphic functions: Functions whose operands can have more than one type.**==
+    - ==E.g., length: List $\alpha \rightarrow$ int in Haskell 2010 .==
+  - ==**Polymorphic types: Types whose operations are applicable to values of more than one type.**==
+    - ==E.g., the abstract base class numbers. Number in Python $3 .$==
 
 ### Types
 
-- **Universal polymorphism**
+- ==**Universal polymorphism**==
 
-  - Will normally work on an infinite number of types that have a given common structure.
-  - Will execute the **same code** for arguments of any admissible type.
-  - Two forms
-    - **Parametric polymorphism**: Think generics.
-    - **Inclusion polymorphism**: Think subtypes and inheritance.
+  - ==Will normally work on an infinite number of types that have a given common structure.==
+  - ==Will execute the **same code** for arguments of any admissible type.==
+  - ==Two forms==
+    - ==**Parametric polymorphism**: Think generics.==
+    - ==**Inclusion polymorphism**: Think subtypes and inheritance.==
 
-- **Ad-hoc polymorphism**
+- ==**Ad-hoc polymorphism**==
 
-  - Will only work on a finite set of different and potentially unrelated types.
+  - ==Will only work on a finite set of different and potentially unrelated types.==
 
-  - May execute completely **different code** for each type of argument.
+  - ==May execute completely **different code** for each type of argument.==
 
-  - Can be considered as a small set of monomorphic functions.
+  - ==Can be considered as a small set of monomorphic functions.==
 
-  - Two forms
+  - ==Two forms==
 
-    - **Overloading**: Convenient syntactic shorthand.
-    - **Coercion**: Semantic operation inserted (either statically or dynamically) to convert an argument to the expected type, to prevent a type error. works for inclusion type
+    - ==**Overloading**: Convenient syntactic shorthand.==
+    - ==**Coercion**: Semantic operation inserted (either statically or dynamically) to convert an argument to the expected type, to prevent a type error. works for inclusion type==
 
   - Example
 
@@ -470,5 +470,5 @@ What is the type of this anonymous function (think Python-ish)?
   - This expression can be assigned a completely reasonable type.
   - The **symbol $f$ has the polytype $\alpha \rightarrow \alpha$ within the scope of the block.**
   - The two uses of $£$ within the block can be typed independently (i.e., heterogeneously, if needed).
-  - The type variable $\alpha$ in the type expression of $f$ is called **generic, and it can have different values in its multiple uses within the expression.**
+  - ==The type variable $\alpha$ in the type expression of $f$ is called **generic, and it can have different values in its multiple uses within the expression.**==
 - Seehttps://github.com/eliben/code-for-blog/tree/master/2018/type-inferencefor a Python implementation of Hindley-Milner type inference.
